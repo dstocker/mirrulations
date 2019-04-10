@@ -1,5 +1,9 @@
 import time
-from mirrulations_core.api_call import *
+from mirrulations_core.api_call import call,\
+                                       ApiCountZeroException,\
+                                       PermanentException,\
+                                       TemporaryException
+from mirrulations_core.mirrulations_logging import logger
 
 
 def api_call_manager(url):

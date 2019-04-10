@@ -1,5 +1,6 @@
 import argparse
 import os
+from redis import Redis
 from threading import Thread
 
 from mirrulations_core.config import server_config_setup
@@ -25,8 +26,9 @@ def main():
     if args['config'] or not os.path.exists(CONFIG_PATH):
         server_config_setup()
 
-    def run_redis():
-        os.system('redis-server')
+    if Redis().ping() != 'PONG':
+        print('Run redis-server before running mirrulations_server!')
+        exit()
 
     def run_flask():
         run()
@@ -35,6 +37,5 @@ def main():
         monolith()
         expire()
 
-    Thread(target=run_redis).start()
     Thread(target=run_flask).start()
     Thread(target=run_work).start()

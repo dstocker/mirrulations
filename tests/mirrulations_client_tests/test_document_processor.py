@@ -1,8 +1,12 @@
-from mirrulations_client.document_processor import *
-from mirrulations_client.documents_processor import *
+from mirrulations_core.api_call_management import api_call_manager
+from mirrulations_client.document_processor import make_doc_url,\
+                                                   get_extra_documents,\
+                                                   save_document,\
+                                                   download_document
 import pytest
 import requests_mock
 import os
+import tempfile
 
 from mirrulations_core.api_call import add_api_key
 

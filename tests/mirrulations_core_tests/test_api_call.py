@@ -1,7 +1,11 @@
 import pytest
 import requests_mock
 
-from mirrulations_core.api_call import *
+from mirrulations_core.api_call import call,\
+                                       add_api_key,\
+                                       ApiCountZeroException,\
+                                       PermanentException,\
+                                       TemporaryException
 
 base_url = 'https://api.data.gov:443/regulations/v3/documents.json?'
 

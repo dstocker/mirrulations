@@ -1,4 +1,5 @@
-from mirrulations_core.api_call_management import *
+from mirrulations_core.api_call import add_api_key
+from mirrulations_core.api_call_management import api_call_manager
 import json
 from mirrulations_core.mirrulations_logging import logger
 import mirrulations_core.config as config
@@ -45,7 +46,7 @@ def process_results(result):
     :param result: Result of the api call
     :return: returns True if the processing completed successfully
     """
-    docs_json = json.loads(result.text)
+    docs_json = result.json()
     try:
         doc_list = docs_json['documents']
         work = make_docs(doc_list)

@@ -1,9 +1,9 @@
 import pytest
 import requests_mock
-from mock import *
-
-from mirrulations_core.api_call_management import *
-
+from mock import Mock, patch
+from mirrulations_core.api_call import add_api_key
+from mirrulations_core.api_call_management import api_call_manager,\
+                                                  CallFailException
 
 base_url = 'https://api.data.gov:443/regulations/v3/documents.json?'
 

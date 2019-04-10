@@ -39,6 +39,8 @@ You will also need a valid API key from Regulations.gov to participate. To apply
 
 To download the actual project, you will need to go to our [GitHub page](https://github.com/MoravianCollege/mirrulations) and [clone](https://help.github.com/articles/cloning-a-repository/) the project to your computer.
 
+If you are running a server, please run a redis server before continuing.
+
 From your terminal, in the project directory, set up a virtual environment by
 
 	python3 -m venv .env

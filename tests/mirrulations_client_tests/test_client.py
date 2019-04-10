@@ -1,6 +1,10 @@
-from mirrulations_client.client import *
+from mirrulations_client.client import get_work,\
+                                       return_doc,\
+                                       return_docs,\
+                                       add_client_log
 import pytest
 import requests_mock
+import tempfile
 from mirrulations_core.api_call import add_api_key
 from mirrulations_core.api_call_management import CallFailException
 import mirrulations_core.config as config
