@@ -2,8 +2,6 @@ import requests
 import mirrulations_core.config as config
 from mirrulations_core.mirrulations_logging import logger
 
-key = config.read_value('key')
-
 
 def call(url):
     """
@@ -33,13 +31,12 @@ def call(url):
     return result
 
 
-def add_api_key(url):
-    """
-    The API key will not be given in the url so it must be added
-    :param url: the url that will be used to make the API call
-    :return: returns the url containing the API key
-    """
-    return url + '&api_key=' + str(key)
+def client_add_api_key(url):
+    return url + '&api_key=' + config.client_read_value('key')
+
+
+def server_add_api_key(url):
+    return url + '&api_key=' + config.server_read_value('key')
 
 
 class TemporaryException(Exception):

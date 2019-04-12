@@ -8,7 +8,7 @@ var/
 dump.rdb
 *.log
 result.zip
-config.json
+.config/
 build/
 dist/
 .coverage

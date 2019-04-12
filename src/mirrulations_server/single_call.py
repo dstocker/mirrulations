@@ -10,6 +10,7 @@ r = redis_manager.RedisManager(redis.Redis())
 
 docs_work = [''.join(random.choice(string.ascii_uppercase + string.digits)
                      for _ in range(16)), "docs",
-             ["https://api.data.gov/regulations/v3/documents.json?rpp=1000&po=11268000"]]
+             ['https://api.data.gov/regulations/v3/'
+              'documents.json?rpp=1000&po=11268000']]
 
 r.add_to_queue(endpoints.generate_json(docs_work))

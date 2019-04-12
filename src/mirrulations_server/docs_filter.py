@@ -56,14 +56,18 @@ def save_client_log(client_id, compressed_file):
     file_list = os.listdir(temp_directory_path)
     for file in file_list:
         if file.endswith('.log'):
-            logger.warning('ms/docs_filter/save_client_log: found file, ' + str(file) + ', that ends with log')
+            logger.warning('ms/docs_filter/save_client_log: found file, '
+                           + str(file)
+                           + ', that ends with log')
             if not os.path.exists(client_path):
                 os.makedirs(client_path)
                 shutil.copy(temp_directory_path + file, client_path)
-                logger.warning('ms/docs_filter/save_client_log: saving log to client-logs directory')
+                logger.warning('ms/docs_filter/save_client_log: '
+                               'saving log to client-logs directory')
             else:
                 shutil.copy(temp_directory_path + file, client_path)
-                logger.warning('ms/docs_filter/save_client_log: saving log to client-logs directory')
+                logger.warning('ms/docs_filter/save_client_log: '
+                               'saving log to client-logs directory')
 
 
 def check_workfile_length(json_data):
