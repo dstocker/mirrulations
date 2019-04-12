@@ -12,8 +12,8 @@ from mirrulations_core.mirrulations_logging import logger
 
 
 VERSION = "0.0.0"
-HOME_REGULATION_PATH = '/mnt/regulations-data/'
-CLIENT_LOG_PATH = '/mnt/regulations-data/client-logs/'
+HOME_REGULATION_PATH = '/desktop/regulations-data/'
+CLIENT_LOG_PATH = '/desktop/client-logs/'
 
 
 def process_docs(redis_server, json_data, compressed_file):
