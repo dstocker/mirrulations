@@ -26,7 +26,7 @@ def process_doc(redis_server, json_data,
         # and create a list of all the files in the directory
         file_list, temp_directory_path = get_file_list(compressed_file,
                                                        temp_directory_path,
-                                                       json_data['user'])
+                                                       json_data['client_id'])
         break_check = False
         for file in file_list:
             job_needs_renew = check_if_document_needs_renew(
