@@ -1,5 +1,3 @@
-"""This program does the validation of data from
-the docs jobs and then creates doc jobs using that data"""
 import random
 import json
 import string
@@ -11,9 +9,11 @@ import mirrulations_core.documents_core as dc
 from mirrulations_core.mirrulations_logging import logger
 
 
+
 VERSION = "0.0.0"
 HOME_REGULATION_PATH = '/Desktop/regulations-data/'
 CLIENT_LOG_PATH = '/Desktop/client-logs/'
+
 
 
 def process_docs(redis_server, json_data, compressed_file):
@@ -24,7 +24,7 @@ def process_docs(redis_server, json_data, compressed_file):
     :param compressed_file: the zipfile containing the client's log
     :return:
     """
-    if redis_server.does_job_exist_in_progress(json_data["job_id"]) is True:
+    if redis_server.does_job_exist_in_progress(json_data['job_id']) is True:
         save_client_log(json_data['client_id'], compressed_file)
         workfile_length_passed = check_workfile_length(json_data)
         file_type_is_docs = json_data['type'] == 'docs'
@@ -44,9 +44,10 @@ def save_client_log(client_id, compressed_file):
     :param compressed_file:
     :return:
     """
+    logger.warning('ms/docs_filter/save_client_log: function called')
     client_path = CLIENT_LOG_PATH + str(client_id) + '/'
 
-    files = zipfile.ZipFile(compressed_file, "r")
+    files = zipfile.ZipFile(compressed_file, 'r')
 
     temp_directory = tempfile.mkdtemp()
     temp_directory_path = str(temp_directory + '/')
@@ -57,11 +58,18 @@ def save_client_log(client_id, compressed_file):
     file_list = os.listdir(temp_directory_path)
     for file in file_list:
         if file.endswith('.log'):
+            logger.warning('ms/docs_filter/save_client_log: found file, '
+                           + str(file)
+                           + ', that ends with log')
             if not os.path.exists(client_path):
                 os.makedirs(client_path)
                 shutil.copy(temp_directory_path + file, client_path)
+                logger.warning('ms/docs_filter/save_client_log: '
+                               'saving log to client-logs directory')
             else:
                 shutil.copy(temp_directory_path + file, client_path)
+                logger.warning('ms/docs_filter/save_client_log: '
+                               'saving log to client-logs directory')
 
 
 def check_workfile_length(json_data):
@@ -71,13 +79,13 @@ def check_workfile_length(json_data):
         :return: True if there are 1000 or less document ids and 1000
                  or less attachments per work file False if either
                  the ids or attachments are over 1000
-        """
+    """
     file_count = 0
     attachment_count = 0
     for work_file in json_data['data']:
         for line in work_file:
             file_count += 1
-            attachment_count += line["count"]
+            attachment_count += line['count']
 
         is_file_count_too_big = file_count > 1000
         is_attachment_count_too_big = attachment_count > 1000
@@ -97,7 +105,7 @@ def check_document_exists(json_data, path=HOME_REGULATION_PATH):
     If a workfile were to become empty it will be removed
         to prevent empty doc jobs from existing.
     """
-    for workfile in json_data["data"]:
+    for workfile in json_data['data']:
         count = 0
         for line in workfile:
             document = line['id']
@@ -147,14 +155,14 @@ def add_document_job_to_queue(redis_server, json_data):
     :param json_data: the json data containing all the work files
     :return:
     """
-    logger.warning('Adding document job to the queue...')
+    logger.warning('Adding document job to the queue')
 
-    for work_file in json_data["data"]:
+    for work_file in json_data['data']:
         random_id = \
             ''.join(random.choices(string.ascii_letters + string.digits, k=16))
         job = create_document_job(work_file, random_id)
         redis_server.add_to_queue(job)
-        logger.warning('Document job successfully added to queue')
+        logger.warning('Document job successfully queued')
 
 
 def create_document_job(work_file, job_id):
@@ -164,7 +172,7 @@ def create_document_job(work_file, job_id):
     :param job_id: The id for the job
     :return: A json in the form of a dictionary
     """
-    logger.warning('Creating document job...')
+    logger.warning('Creating document job')
     dictionary = {'job_id': job_id,
                   'type': 'doc',
                   'data': work_file,

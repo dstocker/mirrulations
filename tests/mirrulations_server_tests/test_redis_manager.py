@@ -5,14 +5,15 @@ from mirrulations_server.redis_manager import RedisManager
 from ast import literal_eval
 import time
 
+
 @mock.patch('mirrulations_server.redis_manager.reset_lock')
 @mock.patch('mirrulations_server.redis_manager.set_lock')
 def make_database(reset, lock):
     r = RedisManager(fakeredis.FakeRedis())
     r.delete_all()
-    list = json.dumps({"A":"a", "B":["b", "c"]})
-    list2 = json.dumps({"D":"d", "E":["e", "f"]})
-    list3 = json.dumps({"G":"g", "H":["h", "i"]})
+    list = json.dumps({"A": "a", "B": ["b", "c"]})
+    list2 = json.dumps({"D": "d", "E": ["e", "f"]})
+    list3 = json.dumps({"G": "g", "H": ["h", "i"]})
     r.add_to_queue(list)
     r.add_to_queue(list2)
     r.add_to_queue(list3)
@@ -49,7 +50,7 @@ def test_get_work():
     assert len(r.get_all_items_in_queue()) == 3
     assert len(r.get_all_items_in_progress()) == 0
     work = r.get_work()
-    assert work == {"A":"a", "B":["b", "c"]}
+    assert work == {"A": "a", "B": ["b", "c"]}
     assert len(r.get_all_items_in_queue()) == 2
     assert len(r.get_all_items_in_progress()) == 1
 
@@ -69,8 +70,9 @@ def test_delete_all():
     assert len(r.get_all_items_in_progress()) == 0
 
 
-@mock.patch('mirrulations_server.redis_manager.get_curr_time', return_value=1531911498)
-def test_find_expired(time):#time):
+@mock.patch('mirrulations_server.redis_manager.get_curr_time',
+            return_value=1531911498)
+def test_find_expired(time):  # time):
     r = make_database()
     r.delete_all()
     t3 = json.dumps((["g", ["h", "i"]]))
@@ -95,15 +97,17 @@ def test_find_no_expired():
 def test_get_specific_item_from_queue():
     r = make_database()
     r.delete_all()
-    r.add_to_queue(json.dumps({"A":"B", "job_id":"d"}))
-    assert r.get_specific_job_from_queue("d") == json.dumps({"A": "B", "job_id": "d"})
+    r.add_to_queue(json.dumps({"A": "B", "job_id": "d"}))
+    assert r.get_specific_job_from_queue("d") == json.dumps({
+        "A": "B", "job_id": "d"})
 
 
 def test_get_specific_item_from_queue_does_not_match():
     r = make_database()
     r.delete_all()
-    r.add_to_queue(json.dumps({"A":"B", "job_id":"c"}))
-    assert r.get_specific_job_from_queue("d") == '{"job_id":"null", "type":"none"}'
+    r.add_to_queue(json.dumps({"A": "B", "job_id": "c"}))
+    assert r.get_specific_job_from_queue(
+        "d") == '{"job_id":"null", "type":"none"}'
 
 
 def test_remove_specific_job_from_queue():
@@ -165,19 +169,3 @@ def test_renew_job(time):
     r.renew_job("c")
     assert len(r.get_all_items_in_queue()) == 1
     assert len(r.get_all_items_in_progress()) == 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

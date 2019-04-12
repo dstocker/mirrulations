@@ -7,10 +7,12 @@ def zip_directory(document_id, directory_path):
 
     if os.path.exists(directory_path):
 
-        with zipfile.ZipFile(zipfile_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        with zipfile.ZipFile(
+                zipfile_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
             root_directory = os.path.basename(directory_path)
 
-            for directory_path, directory_names, file_names in os.walk(directory_path):
+            for directory_path, directory_names, file_names \
+                    in os.walk(directory_path):
                 for file_name in file_names:
 
                     file_path = os.path.join(directory_path, file_name)
@@ -18,7 +20,8 @@ def zip_directory(document_id, directory_path):
 
                     arcname = os.path.join(root_directory, parent_path)
 
-                    # The arcname prevents the archive from writing the full path to the zipfile
+                    # The arcname prevents the archive from
+                    # writing the full path to the zipfile
                     zip_file.write(file_path, arcname)
 
         add_readme(zip_file.filename, document_id)
@@ -26,8 +29,10 @@ def zip_directory(document_id, directory_path):
         return zip_file
 
     else:
-        with zipfile.ZipFile(zipfile_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            zip_file.writestr('README.md', 'This file ' + document_id + ' does not exist')
+        with zipfile.ZipFile(
+                zipfile_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            zip_file.writestr(
+                'README.md', 'This file ' + document_id + ' does not exist')
         return zip_file
 
 

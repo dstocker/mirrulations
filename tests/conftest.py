@@ -1,27 +1,41 @@
+import mock
+import pytest
 import random
 import string
-import json
-import os
-
-CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../config.json')
 
 
-def pytest_addoption(parser):
-    parser.addoption('--makeconfig', action='store', default=(not os.path.exists(CONFIG_PATH)))
+@pytest.fixture(scope='session', autouse=True)
+def mock_client_config():
+    fake_config_dictionary = {
+        'ip': '80.80.80.80',
+        'port': '8080',
+        'key': ''.join(random.choices(
+            string.ascii_letters + string.digits, k=40)),
+        'client id': ''.join(random.choices(
+            string.ascii_letters + string.digits, k=16))
+    }
+
+    with mock.patch('mirrulations_core.config.client_read_value',
+                    side_effect=lambda v: fake_config_dictionary[v]) as f:
+        yield f
 
 
-def pytest_sessionstart(session):
-    if session.config.getoption('makeconfig'):
-        with open(CONFIG_PATH, 'wt') as file:
-            file.write(json.dumps({
-                'ip': '0.0.0.0',
-                'port': '8080',
-                'key': ''.join(random.choices(string.ascii_letters + string.digits, k=40)),
-                'client_id': ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-            }, indent=4))
-            file.close()
+@pytest.fixture(scope='session', autouse=True)
+def mock_server_config():
+    fake_config_dictionary = {
+        'key': ''.join(random.choices(
+            string.ascii_letters + string.digits, k=40))
+    }
+
+    with mock.patch('mirrulations_core.config.server_read_value',
+                    side_effect=lambda v: fake_config_dictionary[v]) as f:
+        yield f
 
 
-def pytest_sessionfinish(session):
-    if session.config.getoption('makeconfig'):
-        os.remove(CONFIG_PATH)
+@pytest.fixture(scope='session', autouse=True)
+def mock_web_config():
+    fake_config_dictionary = {}
+
+    with mock.patch('mirrulations_core.config.web_read_value',
+                    side_effect=lambda v: fake_config_dictionary[v]) as f:
+        yield f

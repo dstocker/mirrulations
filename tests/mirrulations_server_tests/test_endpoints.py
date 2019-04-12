@@ -8,11 +8,13 @@ import json
 import os
 from ast import literal_eval
 
-PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../test_files/mirrulations_files/filename.txt")
+PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                    "../test_files/mirrulations_files/filename.txt")
 
 version = 'v1.3'
 
-endpoints.redis_server = mock.Mock(return_value=RedisManager(fakeredis.FakeRedis()))
+endpoints.redis_server = mock.Mock(return_value=RedisManager(
+    fakeredis.FakeRedis()))
 
 
 @pytest.fixture
@@ -30,21 +32,21 @@ def client():
 
 def make_json():
     return {
-        "job_id":1,
-        "client_id":2,
-        "data":[
+        "job_id": 1,
+        "client_id": 2,
+        "data": [
             [
                 {
-                    "id":1, "attachment_count":1
+                    "id": 1, "attachment_count": 1
                  }
             ],
             [
                 {
-                    "id":2, "attachment_count":2
+                    "id": 2, "attachment_count": 2
                  }
             ]
         ],
-        "version":version
+        "version": version
     }
 
 
@@ -90,11 +92,13 @@ def test_get_queue_item(client):
 def test_generate_json():
     list = ["a", "b", ["a", "b"]]
     json1 = endpoints.generate_json(list)
-    assert json1 == json.dumps({"job_id":"a", "type":"b", "data":["a", "b"], "version": version})
+    assert json1 == json.dumps({"job_id": "a", "type": "b", "data": [
+        "a", "b"], "version": version})
 
 
 def test_return_docs_call_success(client):
-    result = client.post("/return_docs", data={'file':open(PATH, 'rb'), 'json':json.dumps(make_json())})
+    result = client.post("/return_docs", data={'file': open(
+        PATH, 'rb'), 'json': json.dumps(make_json())})
     assert result.status_code == 200
 
 
@@ -104,12 +108,14 @@ def test_return_docs_no_parameter(client):
 
 
 def test_return_doc_call_success(client):
-    result = client.post('/return_doc', data={'file':open(PATH, 'rb'), 'json':json.dumps(make_json())})
+    result = client.post('/return_doc', data={'file': open(
+        PATH, 'rb'), 'json': json.dumps(make_json())})
     assert result.status_code == 200
 
 
 def test_return_doc_no_file_parameter(client):
-    result = client.post('/return_doc', data=dict(json_info=json.dumps(make_json())))
+    result = client.post('/return_doc', data=dict(
+        json_info=json.dumps(make_json())))
     assert result.status_code == 400
 
 

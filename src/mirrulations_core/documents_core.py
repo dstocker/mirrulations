@@ -8,14 +8,14 @@ def get_doc_attributes(document_id):
              docket_id: the docket_id,
              document_id: the document_id
     """
-    if "_" in document_id:
-        split_name = re.split("[-_]", document_id)
-        org = split_name[0] + "_" + split_name[1]
-        docket_id = org + "_" + split_name[2]
-        document_id = docket_id + "-" + split_name[3]
+    if '_' in document_id:
+        split_name = re.split('[-_]', document_id)
+        org = split_name[0] + '_' + split_name[1]
+        docket_id = org + '_' + split_name[2]
+        document_id = docket_id + '-' + split_name[3]
         return org, docket_id, document_id
     else:
-        split_name = re.split("[-]", document_id)
+        split_name = re.split('[-]', document_id)
         length = len(split_name)
         count = 0
         for x in range(length):
@@ -37,17 +37,17 @@ def add_hyphens(list):
     :param list: the list to be hyphenated
     :return: A string of the list with hyphens in-between
     """
-    hyphened_string = ""
+    hyphened_string = ''
     for x in range(len(list)):
         if x == 0:
             if len(list) == 1:
                 hyphened_string = list[x]
             else:
-                hyphened_string = list[x] + "-"
+                hyphened_string = list[x] + '-'
         elif x == len(list) - 1:
             hyphened_string = hyphened_string + list[x]
         else:
-            hyphened_string = hyphened_string + list[x] + "-"
+            hyphened_string = hyphened_string + list[x] + '-'
 
     return hyphened_string
 

@@ -2,7 +2,8 @@ import os
 import zipfile
 import mirrulations_web.download_processor as dp
 
-REGULATIONS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../test_files/regulations-data/')
+REGULATIONS_PATH = os.path.join(os.path.abspath(
+    os.path.dirname(__file__)), '../test_files/regulations-data/')
 CMS_PATH = 'CMS/CMS-2019-0006/CMS-2019-0006-10896'
 
 
