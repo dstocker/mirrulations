@@ -8,8 +8,8 @@ import zipfile
 from mirrulations_core.mirrulations_logging import logger
 import mirrulations_core.documents_core as dc
 
-HOME_REGULATION_PATH = '/desktop/regulations-data/'
-CLIENT_LOG_PATH = '/desktop/regulations-data/client-logs/'
+HOME_REGULATION_PATH = '/Desktop/regulations-data/'
+CLIENT_LOG_PATH = '/Desktop/client-logs/'
 
 
 def process_doc(redis_server, json_data,
