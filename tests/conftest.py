@@ -9,7 +9,7 @@ def mock_client_config():
     fake_config_dictionary = {
         'ip': '80.80.80.80',
         'port': '8080',
-        'key': ''.join(random.choices(
+        'api key': ''.join(random.choices(
             string.ascii_letters + string.digits, k=40)),
         'client id': ''.join(random.choices(
             string.ascii_letters + string.digits, k=16))
@@ -23,7 +23,7 @@ def mock_client_config():
 @pytest.fixture(scope='session', autouse=True)
 def mock_server_config():
     fake_config_dictionary = {
-        'key': ''.join(random.choices(
+        'api key': ''.join(random.choices(
             string.ascii_letters + string.digits, k=40))
     }
 

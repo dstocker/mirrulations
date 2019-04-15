@@ -32,11 +32,11 @@ def call(url):
 
 
 def client_add_api_key(url):
-    return url + '&api_key=' + config.client_read_value('key')
+    return url + '&api_key=' + config.client_read_value('api key')
 
 
 def server_add_api_key(url):
-    return url + '&api_key=' + config.server_read_value('key')
+    return url + '&api_key=' + config.server_read_value('api key')
 
 
 class TemporaryException(Exception):

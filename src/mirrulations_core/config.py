@@ -49,15 +49,15 @@ def read_value(value, string, config_path):
 
 
 def client_read_value(value):
-    read_value(value, 'CLIENT', CLIENT_CONFIG_FILE)
+    return read_value(value, 'CLIENT', CLIENT_CONFIG_FILE)
 
 
 def server_read_value(value):
-    read_value(value, 'SERVER', SERVER_CONFIG_FILE)
+    return read_value(value, 'SERVER', SERVER_CONFIG_FILE)
 
 
 def web_read_value(value):
-    read_value(value, 'WEB', WEB_CONFIG_FILE)
+    return read_value(value, 'WEB', WEB_CONFIG_FILE)
 
 
 def verify_api_key(api_key):
@@ -93,8 +93,8 @@ def client_config_setup():
     with open(CLIENT_CONFIG_FILE, 'wt') as file:
         config = ConfigParser()
         config['CLIENT'] = {
-            'api_key': api_key,
-            'client_id': client_id,
+            'api key': api_key,
+            'client id': client_id,
             'ip': ip,
             'port': port
         }
@@ -113,7 +113,7 @@ def server_config_setup():
     with open(SERVER_CONFIG_FILE, 'wt') as file:
         config = ConfigParser()
         config['SERVER'] = {
-            'api_key': api_key
+            'api key': api_key
         }
         config.write(file)
         file.close()
