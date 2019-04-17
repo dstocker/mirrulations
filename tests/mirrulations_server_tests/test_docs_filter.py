@@ -1,6 +1,5 @@
 import json
 import os
-import fakeredis
 import mock
 import mirrulations_server.docs_filter as dsf
 from mirrulations_server.redis_manager import RedisManager
@@ -14,7 +13,7 @@ REGULATIONS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
 @mock.patch('mirrulations_server.redis_manager.reset_lock')
 @mock.patch('mirrulations_server.redis_manager.set_lock')
 def make_database(reset, lock):
-    r = RedisManager(fakeredis.FakeRedis())
+    r = RedisManager()
     r.delete_all()
     return r
 

@@ -30,7 +30,7 @@ def get_work():
         return 'Bad Parameter', 400
     if len(data_queue) != 0:
         job_id = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                             for _ in range(16))
+                         for _ in range(16))
         type = "docs"
         data = data_queue.pop()
         converted_json = {

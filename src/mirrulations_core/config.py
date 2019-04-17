@@ -107,13 +107,23 @@ def server_config_setup():
     api_key = input('API Key:\n')
     verify_api_key(api_key)
 
+    regulations_path = input('Location to save Documents:\n')
+    if not regulations_path.endswith('/'):
+        regulations_path = regulations_path + '/'
+
+    client_path = input('Location to save Client Logs:\n')
+    if not client_path.endswith('/'):
+        client_path = client_path + '/'
+
     if not os.path.exists(CONFIG_DIR):
         os.mkdir(CONFIG_DIR)
 
     with open(SERVER_CONFIG_FILE, 'wt') as file:
         config = ConfigParser()
         config['SERVER'] = {
-            'api key': api_key
+            'api key': api_key,
+            'regulations path': regulations_path,
+            'client path': client_path
         }
         config.write(file)
         file.close()
@@ -121,10 +131,17 @@ def server_config_setup():
 
 def web_config_setup():
 
+    regulations_path = input('Location to save Documents:\n')
+    if not regulations_path.endswith('/'):
+        regulations_path = regulations_path + '/'
+
     if not os.path.exists(CONFIG_DIR):
         os.mkdir(CONFIG_DIR)
 
     with open(WEB_CONFIG_FILE, 'wt') as file:
-        # config = ConfigParser()
-        # config.write(file)
+        config = ConfigParser()
+        config['WEB'] = {
+            'regulations path': regulations_path
+        }
+        config.write(file)
         file.close()

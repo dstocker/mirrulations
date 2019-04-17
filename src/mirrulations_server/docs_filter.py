@@ -5,15 +5,15 @@ import os
 import zipfile
 import tempfile
 import shutil
+import mirrulations_core.config as config
 import mirrulations_core.documents_core as dc
 from mirrulations_core.mirrulations_logging import logger
 
 
-
-VERSION = "0.0.0"
-HOME_REGULATION_PATH = '/Desktop/regulations-data/'
-CLIENT_LOG_PATH = '/Desktop/client-logs/'
-
+VERSION = '0.0.0'
+HOME_REGULATION_PATH = str(
+    config.server_read_value('regulations path')) + 'regulations-data/'
+CLIENT_LOG_PATH = str(config.server_read_value('client path')) + 'client-logs/'
 
 
 def process_docs(redis_server, json_data, compressed_file):

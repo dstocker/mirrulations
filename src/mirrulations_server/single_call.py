@@ -6,7 +6,7 @@ import mirrulations_server.endpoints as endpoints
 
 redis.Redis().flushdb()
 
-r = redis_manager.RedisManager(redis.Redis())
+r = redis_manager.RedisManager()
 
 docs_work = [''.join(random.choice(string.ascii_uppercase + string.digits)
                      for _ in range(16)), "docs",

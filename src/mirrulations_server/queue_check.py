@@ -1,4 +1,3 @@
-import redis
 from mirrulations_server.redis_manager import RedisManager
 
 
@@ -8,7 +7,7 @@ def queue_check(r):
 
 
 if __name__ == '__main__':
-    r = RedisManager(redis.Redis())
+    r = RedisManager()
     progress, queue = queue_check(r)
     print(progress)
     print(queue)

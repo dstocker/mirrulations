@@ -2,7 +2,6 @@ import pytest
 import requests_mock
 import tempfile
 import os
-import fakeredis
 import json
 import mock
 import mirrulations_server.doc_filter as df
@@ -34,7 +33,7 @@ def savefile_tempdir():
 @mock.patch('mirrulations_server.redis_manager.reset_lock')
 @mock.patch('mirrulations_server.redis_manager.set_lock')
 def make_database(reset, lock):
-    r = RedisManager(fakeredis.FakeRedis())
+    r = RedisManager()
     r.delete_all()
     return r
 
