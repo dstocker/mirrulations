@@ -3,7 +3,7 @@ import os
 
 from mirrulations_core.config import CLIENT_CONFIG_FILE, client_config_setup
 
-from mirrulations_client.client import run_client
+from mirrulations_client.client_runner import run_client
 
 
 def parse_args():
