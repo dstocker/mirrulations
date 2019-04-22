@@ -1,15 +1,15 @@
-from ast import literal_eval
+from redis import Redis
 import redis_lock
 import json
 import time
 
 
 class RedisManager:
-    def __init__(self, database):
+    def __init__(self):
         """
         Initialize the database and create the lock
         """
-        self.r = database
+        self.r = Redis()
         reset_lock(self.r)
         self.lock = set_lock(self.r)
 
@@ -24,8 +24,8 @@ class RedisManager:
             if item_from_queue is None:
                 work = {'type': 'none'}
             else:
-                work = literal_eval(item_from_queue.decode('utf-8'))
-                self.r.hset('progress', get_curr_time(), json.dumps(work))
+                work = json.loads(item_from_queue)
+                self.r.hset('progress', get_curr_time(), item_from_queue)
             return work
 
     def add_to_queue(self, work):
@@ -207,7 +207,7 @@ class RedisManager:
 
             for key in key_list:
                 json_info = self.get_specific_job_from_progress_no_lock(key)
-                info = literal_eval(json_info)
+                info = json.loads(json_info)
 
                 if info['job_id'] == job_id:
                     return key.decode('utf-8')
@@ -223,7 +223,7 @@ class RedisManager:
 
         for key in key_list:
             json_info = self.get_specific_job_from_progress_no_lock(key)
-            info = literal_eval(json_info)
+            info = json.loads(json_info)
             if info['job_id'] == job_id:
                 return key.decode('utf-8')
         return -1

@@ -1,5 +1,4 @@
 from flask import Flask, request
-import redis
 import json
 from mirrulations_server.docs_filter import process_docs
 from mirrulations_server.doc_filter import process_doc
@@ -13,7 +12,7 @@ version = 'v1.3'
 
 
 def redis_server():
-    return RedisManager(redis.Redis())
+    return RedisManager()
 
 
 @app.route('/')

@@ -1,5 +1,6 @@
 import argparse
 from mock import patch
+import pytest
 
 from mirrulations_server.__main__ import main, parse_args
 
@@ -21,9 +22,10 @@ def test_parse_args_config():
 
 
 @patch('mirrulations_server.__main__.os.path.exists', return_value=True)
-@patch('mirrulations_server.__main__.Redis.ping', return_value='')
+@patch('mirrulations_server.__main__.Redis.ping', raises=Exception)
 def test_main_no_config_setup_no_redis(ospe, rping):
-    with patch('mirrulations_server.__main__.parse_args',
+    with pytest.raises(Exception),\
+         patch('mirrulations_server.__main__.parse_args',
                return_value={'config': False}) as pa, \
          patch('mirrulations_server.__main__.print') as pr, \
          patch('mirrulations_server.__main__.exit') as ex, \
@@ -32,6 +34,7 @@ def test_main_no_config_setup_no_redis(ospe, rping):
          patch('mirrulations_server.__main__.expire') as expire:
         main()
         assert pa.called
+        assert pr.called
         assert ex.called
 
 

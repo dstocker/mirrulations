@@ -20,7 +20,7 @@ def test_parse_args_config():
         assert args['config']
 
 
-@patch('mirrulations_web.__main__.os.path.exists', return_value=False)
+@patch('mirrulations_web.__main__.os.path.exists', return_value=True)
 def test_main_no_config_setup(ospe):
     with patch('mirrulations_web.__main__.parse_args',
                return_value={'config': False}) as pa:

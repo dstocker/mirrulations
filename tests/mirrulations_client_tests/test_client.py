@@ -5,18 +5,18 @@ from mirrulations_client.client import get_work,\
 import pytest
 import requests_mock
 import tempfile
-from mirrulations_core.api_call import add_api_key
+from mirrulations_core.api_call import client_add_api_key
 from mirrulations_core.api_call_management import CallFailException
 import mirrulations_core.config as config
 
 
 def get_client_id():
-    return config.read_value('client_id')
+    return config.client_read_value('client id')
 
 
 def get_server_address():
-    return "http://" + config.read_value('ip') +\
-           ":" + config.read_value('port')
+    return "http://" + config.client_read_value('ip') +\
+           ":" + config.client_read_value('port')
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def test_get_work(mock_req, caplog):
 
 def test_return_docs(mock_req):
     mock_req.post(get_server_address() + "/return_docs", status_code=200)
-    mock_req.get(add_api_key(
+    mock_req.get(client_add_api_key(
         'http://website.com/random'), status_code=200, text='{"documents": \
             [{"documentId": "CMS-2005-0001-0001", "attachmentCount": 4},\
             {"documentId": "CMS-2005-0001-0002", "attachmentCount": 999}]}')
@@ -46,7 +46,7 @@ def test_return_docs(mock_req):
 
 
 def ignore_test_return_docs_error(mock_req):
-    mock_req.get(add_api_key('http://website.com/random'),
+    mock_req.get(client_add_api_key('http://website.com/random'),
                  status_code=400, text='{"documents": \
             [{"documentId": "CMS-2005-0001-0001", "attachmentCount": 4},\
             {"documentId": "CMS-2005-0001-0002", "attachmentCount": 999}]}')
@@ -59,7 +59,7 @@ def ignore_test_return_docs_error(mock_req):
 def test_return_doc(mock_req):
     mock_req.post(get_server_address() + "/return_doc", status_code=200)
 
-    mock_req.get(add_api_key(
+    mock_req.get(client_add_api_key(
         'https://api.data.gov/regulations/v3/document?documentId=website-com'),
         status_code=200, text='{ "something": '
                               '["https://api.data.gov/regulations/v3/download?'

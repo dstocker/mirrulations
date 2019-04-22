@@ -1,7 +1,9 @@
 import mirrulations_web.dir_search as ds
 import mirrulations_web.directory_zip as dz
+import mirrulations_core.config as config
 
-HOME_REGULATION_PATH = '/regulations-data/'
+HOME_REGULATION_PATH = str(
+    config.web_read_value('regulations path')) + 'regulations-data/'
 
 
 def download_zip(document_id, download_path=HOME_REGULATION_PATH):

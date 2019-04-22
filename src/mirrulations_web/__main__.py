@@ -1,10 +1,7 @@
 import argparse
 import os
 
-from mirrulations_core.config import web_config_setup
-
-CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                           '../../.config/config.json')
+from mirrulations_core.config import WEB_CONFIG_FILE, web_config_setup
 
 
 def parse_args():
@@ -17,5 +14,5 @@ def parse_args():
 
 def main():
     args = parse_args()
-    if args['config'] or not os.path.exists(CONFIG_PATH):
+    if args['config'] or not os.path.exists(WEB_CONFIG_FILE):
         web_config_setup()

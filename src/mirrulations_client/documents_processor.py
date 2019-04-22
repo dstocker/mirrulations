@@ -1,14 +1,10 @@
-from mirrulations_core.api_call import add_api_key
+from mirrulations_core.api_call import client_add_api_key
 from mirrulations_core.api_call_management import api_call_manager
 import json
 from mirrulations_core.mirrulations_logging import logger
-import mirrulations_core.config as config
 
 workfiles = []
 version = 'v1.3'
-
-key = config.read_value('key')
-client_id = config.read_value('client_id')
 
 
 def documents_processor(urls, job_id, client_id):
@@ -25,7 +21,7 @@ def documents_processor(urls, job_id, client_id):
     workfiles = []
     for url in urls:
         try:
-            result = api_call_manager(add_api_key(url))
+            result = api_call_manager(client_add_api_key(url))
             process_results(result)
         except Exception:
             logger.error('Error - URL processing failed')

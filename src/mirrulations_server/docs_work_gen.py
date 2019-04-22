@@ -1,6 +1,5 @@
 import random
 import string
-import redis
 import mirrulations_core.api_call_management as api_manager
 import mirrulations_server.redis_manager as redis_manager
 import mirrulations_server.endpoints as endpoints
@@ -19,8 +18,8 @@ def monolith():
     :return:
     """
     url_base = 'https://api.data.gov/regulations/v3/documents.json?rpp=1000'
-    r = redis_manager.RedisManager(redis.Redis())
-    regulations_key = config.read_value('key')
+    r = redis_manager.RedisManager()
+    regulations_key = config.server_read_value('api key')
     current_page = 0
 
     if regulations_key != '':
