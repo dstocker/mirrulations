@@ -3,7 +3,7 @@ import os
 
 from mirrulations_core.config import CLIENT_CONFIG_FILE, client_config_setup
 
-from mirrulations_client.client import do_work
+from mirrulations_client.client import run_client
 
 
 def parse_args():
@@ -19,4 +19,4 @@ def main():
     if args['config'] or not os.path.exists(CLIENT_CONFIG_FILE):
         client_config_setup()
 
-    do_work()
+    run_client()
