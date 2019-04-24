@@ -4,6 +4,7 @@ from mirrulations_server.docs_filter import process_docs
 from mirrulations_server.doc_filter import process_doc
 from mirrulations_server.redis_manager import RedisManager
 from mirrulations_core.mirrulations_logging import logger
+import mirrulations_core.config as config
 import io
 
 
@@ -67,7 +68,7 @@ def return_docs():
         logger.error('Error - Could not post docs')
         return 'Bad Parameter', 400
     files = io.BytesIO(files)
-    process_docs(redis_server(), json.loads(json_info), files)
+    process_docs(redis_server(), json.loads(json_info), files, config.server_read_value('regulations path') + 'regulations-data/')
     return 'Successful!'
 
 
@@ -87,7 +88,7 @@ def return_doc():
         logger.error('Error - bad parameter')
         return 'Bad Parameter', 400
     files = io.BytesIO(files)
-    process_doc(redis_server(), json.loads(json_info), files)
+    process_doc(redis_server(), json.loads(json_info), files, config.server_read_value('regulations path') + 'regulations-data/')
     return 'Successful!'
 
 
