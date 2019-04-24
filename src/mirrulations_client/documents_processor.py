@@ -75,10 +75,3 @@ def make_docs(doc_list):
     if size != 0:
         workfiles.append(work_list)
     return workfiles
-
-
-class BadJsonException(Exception):
-    """
-    Raised if the json is not correctly formatted or is empty
-    """
-    pass
