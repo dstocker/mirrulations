@@ -1,7 +1,6 @@
 import json
 import mock
 from mirrulations_server.redis_manager import RedisManager
-from ast import literal_eval
 import time
 
 
@@ -22,7 +21,7 @@ def make_database(reset, lock):
 def ignore_test_iterate():
     r = make_database()
     for item in r.get_all_items_in_queue():
-        item = literal_eval(item.decode('utf-8'))
+        item = json.loads(item.decode('utf-8'))
         if int(time.time()) - item[2] > 21600:
             print(int(time.time()) - item[2])
             print("Expired!")
