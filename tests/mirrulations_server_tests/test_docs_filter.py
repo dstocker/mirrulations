@@ -3,6 +3,7 @@ import os
 import mock
 import mirrulations_server.docs_filter as dsf
 from mirrulations_server.redis_manager import RedisManager
+import mirrulations_core.config as config
 
 PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                     '../../tests/test_files/mirrulations_files/')
@@ -28,14 +29,14 @@ def test_process_docs():
     redis_server = make_database()
     json_data = json.dumps({'job_id': '1',
                             'type': 'docs',
-                            'data': [[{"id": "AHRQ_FRDOC_0001-0036",
+                            'data': [[{"id": "AHRQ_FRDOC_0001-0037",
                                        "count": 1}]],
                             'client_id': 'Alex', 'version': '0.0.0'})
     redis_server.add_to_progress(json_data)
     json_data = json.loads(json_data)
     compressed_file = PATH + 'Archive.zip'
 
-    dsf.process_docs(redis_server, json_data, compressed_file)
+    dsf.process_docs(redis_server, json_data, compressed_file, config.server_read_value('regulations path') + 'regulations-data/')
     queue = redis_server.get_all_items_in_queue()
     progress = redis_server.get_all_items_in_progress()
     assert len(queue) == 1
@@ -74,7 +75,7 @@ def test_file_checker_too_many_attachments():
 
 def test_check_document_exists():
     test_data = generate_json_data(PATH + '1_workfile_2_documents.json')
-    test_data = dsf.check_document_exists(test_data, REGULATIONS_PATH)
+    test_data = dsf.check_document_exists(test_data, config.server_read_value('regulations path') + 'regulations-data/')
     assert test_data['data'] == [[{'id': 'AHRQ_FRDOC_0001-0037', 'count': 1}]]
 
 
