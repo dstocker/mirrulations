@@ -1,6 +1,5 @@
 from mirrulations_core.api_call import client_add_api_key
 from mirrulations_core.api_call_management import api_call_manager
-import json
 from mirrulations_core.mirrulations_logging import logger
 
 workfiles = []
@@ -26,12 +25,11 @@ def documents_processor(urls, job_id, client_id):
         except Exception:
             logger.error('Error - URL processing failed')
 
-    result = json.loads(json.dumps({'job_id': job_id,
-                                    'type': 'docs',
-                                    'data': workfiles,
-                                    'client_id': client_id,
-                                    'version': version}))
-    return result
+    return {'job_id': job_id,
+            'type': 'docs',
+            'data': workfiles,
+            'client_id': client_id,
+            'version': version}
 
 
 def process_results(result):
@@ -77,10 +75,3 @@ def make_docs(doc_list):
     if size != 0:
         workfiles.append(work_list)
     return workfiles
-
-
-class BadJsonException(Exception):
-    """
-    Raised if the json is not correctly formatted or is empty
-    """
-    pass

@@ -1,4 +1,5 @@
 import tempfile
+import time
 import json
 from mirrulations_core.api_call import client_add_api_key
 from mirrulations_core.api_call_management import api_call_manager,\
@@ -130,6 +131,7 @@ def download_attachments(dirpath, doc_json, documentId):
         for attachment in extra_attachments:
             attachment_formats = attachment['fileFormats']
             for a_format in attachment_formats:
+                time.sleep(30)
                 here = str(a_format).index('contentType') + 12
                 type = str(a_format)[here:]
                 result = api_call_manager(client_add_api_key(str(a_format)))

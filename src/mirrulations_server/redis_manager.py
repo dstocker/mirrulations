@@ -87,8 +87,9 @@ class RedisManager:
         with self.lock:
             for item in self.r.hgetall('progress'):
                 if float(time.time()) - float(item.decode('utf-8')) > 21600:
+                    job = self.get_specific_job_from_progress_no_lock(item)
+                    self.r.rpush('queue', job)
                     self.r.hdel('progress', item)
-                    self.r.rpush('queue', item)
 
     def delete_all(self):
         """

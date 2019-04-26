@@ -9,14 +9,10 @@ import mirrulations_core.config as config
 import mirrulations_core.documents_core as dc
 from mirrulations_core.mirrulations_logging import logger
 
-
 VERSION = '0.0.0'
-HOME_REGULATION_PATH = str(
-    config.server_read_value('regulations path')) + 'regulations-data/'
-CLIENT_LOG_PATH = str(config.server_read_value('client path')) + 'client-logs/'
 
 
-def process_docs(redis_server, json_data, compressed_file):
+def process_docs(redis_server, json_data, compressed_file, path):
     """
     Main documents function, called by the server to compile list of
     document jobs and add them to the "queue" queue
@@ -30,8 +26,7 @@ def process_docs(redis_server, json_data, compressed_file):
         file_type_is_docs = json_data['type'] == 'docs'
 
         if workfile_length_passed and file_type_is_docs:
-
-            json_data = check_document_exists(json_data)
+            json_data = check_document_exists(json_data, path)
             add_document_job_to_queue(redis_server, json_data)
             dc.remove_job_from_progress(redis_server, json_data)
         else:
@@ -45,7 +40,7 @@ def save_client_log(client_id, compressed_file):
     :return:
     """
     logger.warning('ms/docs_filter/save_client_log: function called')
-    client_path = CLIENT_LOG_PATH + str(client_id) + '/'
+    client_path = config.server_read_value('client path') + 'client-logs/' + client_id + '/'
 
     files = zipfile.ZipFile(compressed_file, 'r')
 
@@ -96,7 +91,7 @@ def check_workfile_length(json_data):
         return True
 
 
-def check_document_exists(json_data, path=HOME_REGULATION_PATH):
+def check_document_exists(json_data, path):
     """
     Checks to see if a document was already downloaded or
         already in one of the queues.
@@ -105,6 +100,8 @@ def check_document_exists(json_data, path=HOME_REGULATION_PATH):
     If a workfile were to become empty it will be removed
         to prevent empty doc jobs from existing.
     """
+    #path = str(
+    #config.server_read_value('regulations path')) + 'regulations-data/'
     for workfile in json_data['data']:
         count = 0
         for line in workfile:

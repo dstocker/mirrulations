@@ -4,7 +4,6 @@ import fakeredis
 import mirrulations_server.endpoints as endpoints
 import json
 import os
-from ast import literal_eval
 
 PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                     "../test_files/mirrulations_files/filename.txt")
@@ -80,7 +79,7 @@ def test_get_work_wrong_parameter(client):
 
 def test_get_queue_item(client):
     r = make_database()
-    list = literal_eval(r.lpop("queue").decode("utf-8"))
+    list = json.loads(r.lpop("queue").decode("utf-8"))
     assert list == ['a', ['b', 'c']]
 
 
