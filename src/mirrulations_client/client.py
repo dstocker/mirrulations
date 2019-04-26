@@ -87,7 +87,7 @@ def return_doc(json_result, server_url, client_id):
                       files={'file': ('result.zip', fileobj)},
                       data={'json': json.dumps({'job_id': job_id,
                                                 'type': 'doc',
-                                                'user': client_id,
+                                                'client_id': client_id,
                                                 'version': version})})
     r.raise_for_status()
     logger.warning('Client returned doc')
