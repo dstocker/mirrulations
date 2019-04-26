@@ -13,20 +13,20 @@ version = 'v1.3'
 
 test_queue = [['docs', ['https://api.data.gov/regulations/v3/documents.json?rpp=5&po=0']]]
 call_zero = json.dumps({'documents': [{'attachmentCount': 0,
-                                            'documentId': 'TEST-0-0'},
-                                           {'attachmentCount': 1,
-                                            'documentId': 'TEST-0-1'},
-                                           {'attachmentCount': 2,
-                                            'documentId': 'TEST-0-2'},
-                                           {'attachmentCount': 3,
-                                            'documentId': 'TEST-0-3'},
-                                           {'attachmentCount': 4,
-                                            'documentId': 'TEST-0-4'}]})
-result_zero = [[{"id": "TEST-0-0", "count": 1},
-                     {"id": "TEST-0-1", "count": 2},
-                     {"id": "TEST-0-2", "count": 3},
-                     {"id": "TEST-0-3", "count": 4},
-                     {"id": "TEST-0-4", "count": 5}]]
+                                       'documentId': 'TEST-0-0'},
+                                      {'attachmentCount': 1,
+                                       'documentId': 'TEST-0-1'},
+                                      {'attachmentCount': 2,
+                                       'documentId': 'TEST-0-2'},
+                                      {'attachmentCount': 3,
+                                       'documentId': 'TEST-0-3'},
+                                      {'attachmentCount': 4,
+                                       'documentId': 'TEST-0-4'}]})
+result_zero = [[{'id': 'TEST-0-0', 'count': 1},
+                {'id': 'TEST-0-1', 'count': 2},
+                {'id': 'TEST-0-2', 'count': 3},
+                {'id': 'TEST-0-3', 'count': 4},
+                {'id': 'TEST-0-4', 'count': 5}]]
 
 @app.route('/')
 def default():
