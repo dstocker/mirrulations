@@ -6,16 +6,11 @@ import shutil
 import re
 import zipfile
 import mirrulations_core.config as config
-from mirrulations_core.mirrulations_logging import logger
 import mirrulations_core.documents_core as dc
-
-HOME_REGULATION_PATH = str(
-    config.server_read_value('regulations path')) + 'regulations-data/'
-CLIENT_LOG_PATH = str(config.server_read_value('client path')) + 'client-logs/'
 
 
 def process_doc(redis_server, json_data,
-                compressed_file, destination=HOME_REGULATION_PATH):
+                compressed_file, destination):
     """
     Main document function, called by the server to check and
     save document files returned from the client
@@ -34,7 +29,6 @@ def process_doc(redis_server, json_data,
             job_needs_renew = check_if_document_needs_renew(
                 file, json_data, temp_directory_path)
             if job_needs_renew is True:
-                print('Renew is True')
                 redis_server.renew_job(json_data['job_id'])
                 break_check = True
                 break
@@ -51,7 +45,7 @@ def get_file_list(compressed_file, compressed_file_path, client_id):
     :param client_id: the id of the client that did the job
     :return: The list of file names in the compressed file
     """
-    client_path = CLIENT_LOG_PATH + str(client_id) + '/'
+    client_path = config.server_read_value('client path') + 'client-logs/' + client_id + '/'
     files = zipfile.ZipFile(compressed_file, 'r')
     files.extractall(compressed_file_path)
 
