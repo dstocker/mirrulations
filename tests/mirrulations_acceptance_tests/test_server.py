@@ -17,7 +17,7 @@ def client():
 def return_data_ids(number_ids):
     return_data_string = '['
     for i in range(0, number_ids):
-        return_data_string += '[{"id": "AHRQ_FRDOC_0001-0036", "count": ' + str(number_ids) + '}],'
+        return_data_string += '[{"id": "AHRQ_FRDOC_0001-0037", "count": ' + str(number_ids) + '}],'
     return_data_string = return_data_string[:-1]
     return_data_string += ']'
     return return_data_string
@@ -78,7 +78,7 @@ def test_docs_job_in_db_return_doc_place_in_db_queue(client):
                 data={'file': open(PATH + 'Archive.zip', 'rb'),
                       'json': json.dumps({'job_id': '1234',
                                           'type': 'docs',
-                                          'data': [[{'id': 'AHRQ_FRDOC_0001-0036', 'count': 1}]],
+                                          'data': [[{'id': 'AHRQ_FRDOC_0001-0037', 'count': 1}]],
                                           'client_id': 'abcd',
                                           'version': '0.5'})})
     assert len(rm.get_all_items_in_queue()) == 1
@@ -97,8 +97,8 @@ def test_docs_job_return_multiple_doc_place_in_db_queue(client):
     client.post('/return_docs',
                 data={'file': open(PATH + 'Archive.zip', 'rb'),
                       'json': json.dumps({'job_id': '1234', 'type': 'docs',
-                                          'data': [[{'id': 'AHRQ_FRDOC_0001-0036', 'count': 1}],
-                                                   [{'id': 'AHRQ_FRDOC_0002-0036', 'count': 2}]],
+                                          'data': [[{'id': 'AHRQ_FRDOC_0001-0037', 'count': 1}],
+                                                   [{'id': 'AHRQ_FRDOC_0002-0037', 'count': 2}]],
                                           'client_id': 'abcd', 'version': '0.5'})})
     assert len(rm.get_all_items_in_queue()) == 2
     assert rm.does_job_exist_in_progress('1234') is False
