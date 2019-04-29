@@ -114,4 +114,6 @@ def test_doc_client():
         files.extractall(temp_directory_path)
         file_list = os.listdir(temp_directory_path)
 
-        assert file_list == ['doc.TEST-1-0.json', 'doc.TEST-1-0.pdf', 'mirrulations.log']
+        assert 'mirrulations.log' in file_list
+        assert 'doc.TEST-1-0.json' in file_list
+        assert 'doc.TEST-1-0.pdf' in file_list
