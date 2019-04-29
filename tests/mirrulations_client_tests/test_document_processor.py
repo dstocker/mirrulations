@@ -3,6 +3,7 @@ from mirrulations_client.document_processor import make_doc_url,\
                                                    get_extra_documents,\
                                                    save_document,\
                                                    download_document
+import mock
 import pytest
 import requests_mock
 import os
@@ -74,8 +75,9 @@ def test_collect_attachments(mock_req, workfile_tempdir):
         "FDA-2015-N-0540-0004&attachmentNumber=1&contentType=pdf"),
                  status_code=200, text='Document!')
 
-    result = get_extra_documents(api_call_manager(client_add_api_key(
-        make_doc_url("DOCUMENT"))), workfile_tempdir, "FDA-2015-N-0540-0004")
+    with mock.patch('time.sleep'):
+        result = get_extra_documents(api_call_manager(client_add_api_key(
+            make_doc_url("DOCUMENT"))), workfile_tempdir, "FDA-2015-N-0540-0004")
 
     assert result == 1
 
