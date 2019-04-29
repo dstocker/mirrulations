@@ -1,8 +1,8 @@
+import json
+import os
 import pytest
 from mirrulations_server.endpoints import app
 from mirrulations_server.redis_manager import RedisManager
-import json
-import os
 
 PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                     '../test_files/mirrulations_files/')
