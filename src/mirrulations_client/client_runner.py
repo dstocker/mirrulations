@@ -129,27 +129,31 @@ def do_work():
 
     server_url = 'http://' + ip + ':' + port
 
+    try:
+        work = get_work(server_url, client_id)
+        requests.get(client_health_url)
+        work_json = json.loads(work.content.decode('utf-8'))
+    except man.CallFailException:
+        time.sleep(3600)
+        return None
+    if work_json['type'] == 'doc':
+        r = return_doc(work_json, server_url, client_id)
+        requests.get(client_health_url)
+    elif work_json['type'] == 'docs':
+        r = return_docs(work_json, server_url, client_id)
+        requests.get(client_health_url)
+    elif work_json['type'] == 'none':
+        time.sleep(3600)
+        requests.get(client_health_url)
+    else:
+        logger.error('Error - Job type unexpected')
+        requests.get(client_health_url + '/fail')
+
+
+def run_client():
     while True:
-        try:
-            work = get_work(server_url, client_id)
-            requests.get(client_health_url)
-            work_json = json.loads(work.content.decode('utf-8'))
-        except man.CallFailException:
-            time.sleep(3600)
-            continue
-        if work_json['type'] == 'doc':
-            r = return_doc(work_json, server_url, client_id)
-            requests.get(client_health_url)
-        elif work_json['type'] == 'docs':
-            r = return_docs(work_json, server_url, client_id)
-            requests.get(client_health_url)
-        elif work_json['type'] == 'none':
-            time.sleep(3600)
-            requests.get(client_health_url)
-        else:
-            logger.error('Error - Job type unexpected')
-            requests.get(client_health_url + '/fail')
+        do_work()
 
 
 if __name__ == '__main__':
-    do_work()
+    run_client()
