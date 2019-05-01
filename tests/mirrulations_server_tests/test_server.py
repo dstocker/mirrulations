@@ -3,10 +3,22 @@ import os
 import pytest
 from mirrulations_server.endpoints import app
 from mirrulations_server.redis_manager import RedisManager
+import shutil
+import mirrulations_core.config as config
+
+import mock
 
 PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                     '../test_files/mirrulations_files/')
-
+def get_count_of_doc():
+    count = 0
+    for name in os.listdir(config.server_read_value('regulations path') + 'regulations-data/'):
+        for org in os.listdir(config.server_read_value('regulations path') + 'regulations-data/'+ name):
+            for id in os.listdir(config.server_read_value('regulations path') + 'regulations-data/'+ name + '/' + org):
+                for num in os.listdir(config.server_read_value('regulations path') + 'regulations-data/'+ name + '/' + org + '/' + id):
+                    if os.path.isfile(config.server_read_value('regulations path') + 'regulations-data/' + name + '/' + org + '/' + id + '/' + num):
+                        count += 1
+    return count
 
 @pytest.fixture
 def client():
@@ -163,4 +175,108 @@ def test_docs_job_return_1000_doc_place_in_db_queue_with_helper_method_and_1000_
                                           'client_id': 'abcd', 'version': '0.5'})})
 
     assert len(rm.get_all_items_in_queue()) == 1000
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        json.dumps({"data": [{"id": "AAAA-AAAA-0001-0001", "count": 1}], "version": "v0.5", "type": "doc", "job_id": "1234"}))
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_single_doc.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                         'client_id': "abcd", "version": "0.5"})})
+    assert len(rm.get_all_items_in_queue()) == 0
+    count = get_count_of_doc()
+    assert count == 1
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_two_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        b'{"data": [{"id": "AAAA-AAAA-0001-0001", "count": 1}, {"id": "BBBB-BBBB-0001-0001", "count": 1}], "version": "v0.5", "type": "doc", "job_id": "1234"}')
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_two_doc.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                          'client_id': "abcd", "version": "0.5"})})
+    count = get_count_of_doc()
+    assert count == 2
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert len(rm.get_all_items_in_queue()) == 0
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_100_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        b'{"data": ["A"], "version": "v0.5", "type": "doc", "job_id": "1234"}')
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_100_doc.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                          'client_id': "abcd", "version": "0.5"})})
+    count = get_count_of_doc()
+    assert count == 100
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert len(rm.get_all_items_in_queue()) == 0
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_1000_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        b'{"data": ["A"], "version": "v0.5", "type": "doc", "job_id": "1234"}')
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_1000_doc.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                          'client_id': "abcd", "version": "0.5"})})
+    count = get_count_of_doc()
+    assert count == 1000
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert len(rm.get_all_items_in_queue()) == 0
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_10000_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        b'{"data": ["A"], "version": "v0.5", "type": "doc", "job_id": "1234"}')
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_10000_doc.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                          'client_id': "abcd", "version": "0.5"})})
+    count = get_count_of_doc()
+
+    assert count == 10000
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert len(rm.get_all_items_in_queue()) == 0
+    assert rm.does_job_exist_in_progress('1234') is False
+
+@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+def test_doc_job_return_10000_large_doc_saved(mock_dir, client):
+    rm = RedisManager()
+    rm.add_to_queue(
+        b'{"data": ["A"], "version": "v0.5", "type": "doc", "job_id": "1234"}')
+    result = client.get('/get_work?client_id=asdf')
+
+    client.post("/return_doc",
+                data={'file': open(PATH + "test_10000_doc_larger_json.zip", 'rb'),
+                      'json': json.dumps({'job_id': "1234", 'type': 'doc',
+                                          'client_id': "abcd", "version": "0.5"})})
+    count = get_count_of_doc()
+
+    assert count == 10000
+    shutil.rmtree(config.server_read_value('regulations path'))
+    assert len(rm.get_all_items_in_queue()) == 0
     assert rm.does_job_exist_in_progress('1234') is False
