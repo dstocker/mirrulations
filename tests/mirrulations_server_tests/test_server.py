@@ -10,6 +10,8 @@ import mock
 
 PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                     '../test_files/mirrulations_files/')
+doc_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                    '../test_files/acceptance/')
 def get_count_of_doc():
     count = 0
     for name in os.listdir(config.server_read_value('regulations path') + 'regulations-data/'):
@@ -177,7 +179,7 @@ def test_docs_job_return_1000_doc_place_in_db_queue_with_helper_method_and_1000_
     assert len(rm.get_all_items_in_queue()) == 1000
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
@@ -194,7 +196,7 @@ def test_doc_job_return_doc_saved(mock_dir, client):
     shutil.rmtree(config.server_read_value('regulations path'))
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_two_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
@@ -211,7 +213,7 @@ def test_doc_job_return_two_doc_saved(mock_dir, client):
     assert len(rm.get_all_items_in_queue()) == 0
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_100_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
@@ -228,7 +230,7 @@ def test_doc_job_return_100_doc_saved(mock_dir, client):
     assert len(rm.get_all_items_in_queue()) == 0
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_1000_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
@@ -245,7 +247,7 @@ def test_doc_job_return_1000_doc_saved(mock_dir, client):
     assert len(rm.get_all_items_in_queue()) == 0
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_10000_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
@@ -263,7 +265,7 @@ def test_doc_job_return_10000_doc_saved(mock_dir, client):
     assert len(rm.get_all_items_in_queue()) == 0
     assert rm.does_job_exist_in_progress('1234') is False
 
-@mock.patch('mirrulations_core.config.server_read_value', return_value='/Users/daniel/Documents/SysDesign/mirrulations/tests/test_files/acceptance/')
+@mock.patch('mirrulations_core.config.server_read_value', return_value=doc_path)
 def test_doc_job_return_10000_large_doc_saved(mock_dir, client):
     rm = RedisManager()
     rm.add_to_queue(
